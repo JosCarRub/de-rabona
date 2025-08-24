@@ -1,0 +1,494 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}De Rabona - Home{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/global/home_styles.css' %}" rel="stylesheet">
+<style>
+/* Estilos adicionales para el hero mejorado */
+.hero-profile {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.hero-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid var(--home-accent);
+    object-fit: cover;
+    box-shadow: 0 8px 25px rgba(247, 131, 92, 0.25);
+    transition: var(--home-transition);
+}
+
+.hero-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(247, 131, 92, 0.35);
+}
+
+/* Rank pill especial */
+.rank-pill {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid var(--home-border) !important;
+    backdrop-filter: blur(12px);
+    transition: var(--home-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.rank-pill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    border-radius: inherit;
+    z-index: 1;
+}
+
+.rank-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.rank-icon {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.rank-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+/* Estilos específicos por rango */
+.rank-bronze {
+    border-color: rgba(205, 127, 50, 0.4) !important;
+    color: #cd7f32 !important;
+    box-shadow: 0 4px 15px rgba(205, 127, 50, 0.15) !important;
+}
+.rank-bronze::before {
+    background: linear-gradient(135deg, #cd7f32, #8b4513);
+}
+
+.rank-silver {
+    border-color: rgba(192, 192, 192, 0.4) !important;
+    color: #c0c0c0 !important;
+    box-shadow: 0 4px 15px rgba(192, 192, 192, 0.15) !important;
+}
+.rank-silver::before {
+    background: linear-gradient(135deg, #c0c0c0, #808080);
+}
+
+.rank-gold {
+    border-color: rgba(255, 215, 0, 0.4) !important;
+    color: #ffd700 !important;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15) !important;
+}
+.rank-gold::before {
+    background: linear-gradient(135deg, #ffd700, #daa520);
+}
+
+.rank-platinum {
+    border-color: rgba(229, 228, 226, 0.4) !important;
+    color: #e5e4e2 !important;
+    box-shadow: 0 4px 15px rgba(229, 228, 226, 0.15) !important;
+}
+.rank-platinum::before {
+    background: linear-gradient(135deg, #e5e4e2, #a9a9a9);
+}
+
+.rank-diamond {
+    border-color: rgba(185, 242, 255, 0.4) !important;
+    color: #b9f2ff !important;
+    box-shadow: 0 4px 15px rgba(185, 242, 255, 0.15) !important;
+}
+.rank-diamond::before {
+    background: linear-gradient(135deg, #b9f2ff, #00bfff);
+}
+
+.rank-legend {
+    border-color: rgba(255, 107, 53, 0.4) !important;
+    color: #ff6b35 !important;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.15) !important;
+}
+.rank-legend::before {
+    background: linear-gradient(135deg, #ff6b35, #ff4500);
+}
+
+.rank-pill:hover {
+    transform: translateY(-3px);
+}
+
+.rank-pill:hover::before {
+    opacity: 0.15;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+    .hero-avatar {
+        width: 72px;
+        height: 72px;
+    }
+    
+    .rank-name {
+        font-size: 0.85rem;
+    }
+    
+    .rank-icon {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    
+    .hero-profile {
+        order: -1;
+        margin-left: 0;
+        justify-content: center;
+    }
+    
+    .hero-avatar {
+        width: 70px;
+        height: 70px;
+        border-width: 2px;
+    }
+    
+    .stats-overview {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .rank-pill {
+        min-width: 120px;
+    }
+    
+    .rank-name {
+        font-size: 0.8rem;
+    }
+    
+    .rank-icon {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-avatar {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .stats-overview {
+        gap: 0.75rem;
+    }
+    
+    .rank-pill {
+        min-width: 110px;
+        padding: 0.8rem 1.2rem;
+    }
+    
+    .rank-content {
+        gap: 0.4rem;
+    }
+    
+    .rank-name {
+        font-size: 0.75rem;
+    }
+    
+    .rank-icon {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-avatar {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .rank-pill {
+        min-width: 100px;
+        padding: 0.7rem 1rem;
+    }
+    
+    .rank-name {
+        font-size: 0.7rem;
+    }
+    
+    .rank-icon {
+        font-size: 0.85rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-futbol"></i>
+            </div>
+            
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Bienvenido <span class="user-highlight">{{ user.nombre|default:user.username }}</span>
+                </h1>
+                <p class="hero-subtitle">Tu centro de comando futbolístico</p>
+            </div>
+            
+            <!-- Avatar del usuario -->
+            <div class="hero-profile">
+                <img src="{{ user.get_avatar_url }}" 
+                     alt="Avatar de {{ user.nombre }}" 
+                     class="hero-avatar">
+            </div>
+        </div>
+        
+        <div class="stats-overview">
+            <!-- Rango como stat-pill especial -->
+            <div class="stat-pill rank-pill {% if user.calificacion >= 2000 %}rank-legend{% elif user.calificacion >= 1800 %}rank-diamond{% elif user.calificacion >= 1600 %}rank-platinum{% elif user.calificacion >= 1400 %}rank-gold{% elif user.calificacion >= 1200 %}rank-silver{% else %}rank-bronze{% endif %}">
+                <div class="rank-content">
+                    <span class="rank-icon">
+                        {% if user.calificacion >= 2000 %}⭐
+                        {% elif user.calificacion >= 1800 %}💎
+                        {% elif user.calificacion >= 1600 %}👑
+                        {% elif user.calificacion >= 1400 %}🏆
+                        {% elif user.calificacion >= 1200 %}⚔️
+                        {% else %}🛡️
+                        {% endif %}
+                    </span>
+                    <span class="rank-name">
+                        {% if user.calificacion >= 2000 %}Leyenda
+                        {% elif user.calificacion >= 1800 %}Diamante
+                        {% elif user.calificacion >= 1600 %}Platino
+                        {% elif user.calificacion >= 1400 %}Oro
+                        {% elif user.calificacion >= 1200 %}Plata
+                        {% else %}Bronce
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="stat-pill">
+                <span class="stat-number">{{ user.calificacion|floatformat:0|default:"1000" }}</span>
+                <span class="stat-label">ELO</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-number">{{ user.partidos_jugados|default:0 }}</span>
+                <span class="stat-label">Partidos</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-number">{% if user.partidos_jugados > 0 %}{% widthratio user.victorias user.partidos_jugados 100 %}{% else %}0{% endif %}%</span>
+                <span class="stat-label">Victoria</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Actions Section -->
+    <section class="actions-section">
+        <div class="section-header">
+            <h2 class="section-title">Acciones Rápidas</h2>
+            <div class="title-accent"></div>
+        </div>
+        
+        <div class="actions-grid">
+            <a href="{% url 'crear_partidos' %}" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Crear</h3>
+                    <p class="action-desc">Nuevo partido</p>
+                </div>
+            </a>
+            
+            <a href="{% url 'buscar_partidos' %}" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Buscar</h3>
+                    <p class="action-desc">Partidos disponibles</p>
+                </div>
+            </a>
+            
+            <a href="{% url 'lista_mis_equipos' %}" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Equipos</h3>
+                    <p class="action-desc">Gestionar equipos</p>
+                </div>
+            </a>
+            
+            <a href="{% url 'canchas_lista' %}" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Canchas</h3>
+                    <p class="action-desc">Explorar espacios</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="content-section">
+        <div class="content-grid">
+            <!-- Próximos Partidos -->
+            <div class="content-card large">
+                <div class="card-header">
+                    <div class="header-content">
+                        <h3 class="card-title">Próximos Partidos</h3>
+                        <span class="card-subtitle">{{ proximos_partidos_dashboard|length }} programados</span>
+                    </div>
+                    <a href="{% url 'mis_partidos' %}" class="header-link">Ver todos</a>
+                </div>
+                
+                <div class="card-body">
+                    {% if proximos_partidos_dashboard %}
+                        <div class="matches-list">
+                            {% for item in proximos_partidos_dashboard|slice:":4" %}
+                                {% with partido=item.partido %}
+                                <div class="match-item">
+                                    <div class="match-info">
+                                        <div class="match-header">
+                                            <h4 class="match-venue">{{ partido.cancha.nombre_cancha }}</h4>
+                                            <span class="match-type">{{ partido.get_tipo_display }}</span>
+                                        </div>
+                                        <div class="match-meta">
+                                            <span class="match-time">{{ partido.fecha|date:"d M, H:i" }}</span>
+                                            <span class="match-players">{{ partido.jugadores.count }}/{{ partido.max_jugadores }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="match-status">
+                                        {% if partido.inscripcion_abierta and item.plazas_disponibles > 0 %}
+                                            <span class="status-dot available"></span>
+                                            <span class="status-text">Disponible</span>
+                                        {% else %}
+                                            <span class="status-dot full"></span>
+                                            <span class="status-text">Completo</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="empty-content">
+                                <h4 class="empty-title">Sin partidos programados</h4>
+                                <p class="empty-desc">Busca partidos disponibles para unirte</p>
+                                <a href="{% url 'buscar_partidos' %}" class="btn btn-primary">Buscar Partidos</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Estadísticas Personales -->
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="header-content">
+                        <h3 class="card-title">Rendimiento</h3>
+                        <span class="card-subtitle">Estadísticas globales</span>
+                    </div>
+                    <a href="{% url 'perfil' %}" class="header-link">Perfil</a>
+                </div>
+                
+                <div class="card-body">
+                    <div class="performance-stats">
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <span class="stat-value">{{ user.partidos_jugados|default:0 }}</span>
+                                <span class="stat-label">Jugados</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">{{ user.victorias|default:0 }}</span>
+                                <span class="stat-label">Victorias</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <span class="stat-value">{{ user.empates|default:0 }}</span>
+                                <span class="stat-label">Empates</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">{{ user.derrotas|default:0 }}</span>
+                                <span class="stat-label">Derrotas</span>
+                            </div>
+                        </div>
+                        
+                        {% with total_partidos=user.partidos_jugados|default:0 %}
+                            {% if total_partidos > 0 %}
+                                <div class="win-rate">
+                                    <div class="win-rate-header">
+                                        <span class="win-rate-label">Tasa de victoria</span>
+                                        <span class="win-rate-value">{% widthratio user.victorias total_partidos 100 %}%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {% widthratio user.victorias total_partidos 100 %}%"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animaciones sutiles y elegantes
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('animate-in');
+                }, index * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observar elementos para animación
+    document.querySelectorAll('.action-card, .content-card, .stat-pill, .hero-avatar, .hero-rank').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
+{% endblock %}

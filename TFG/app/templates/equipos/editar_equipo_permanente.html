@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina|default:"Editar Equipo" }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+    <style>
+        /* ======= Variables y Base ======= */
+        :root {
+            --editar-primary: #f7835c;
+            --editar-secondary: #00d4b1;
+            --editar-bg-card: #1a1a2e;
+            --editar-bg-elevated: #242438;
+            --editar-border: rgba(255, 255, 255, 0.12);
+            --editar-radius: 16px;
+            --editar-radius-small: 12px;
+            --editar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ======= Contenedor Principal ======= */
+        .editar-equipo-page .card {
+            background-color: var(--editar-bg-card);
+            border-color: var(--editar-border);
+            border-radius: var(--editar-radius);
+        }
+
+        .editar-equipo-page .form-section-title {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .editar-equipo-page .form-section-title i {
+            color: var(--editar-primary);
+        }
+
+        /* ======= Estilos para Crispy Forms ======= */
+        /* Estilo general para los campos de texto y textarea */
+        .equipo-form .form-control,
+        .equipo-form .form-select {
+            background-color: var(--editar-bg-elevated);
+            border-color: var(--editar-border);
+            color: var(--text-primary);
+            border-radius: var(--editar-radius-small);
+            transition: var(--editar-transition);
+        }
+        .equipo-form .form-control:focus,
+        .equipo-form .form-select:focus {
+            background-color: var(--editar-bg-elevated);
+            border-color: var(--editar-primary);
+            box-shadow: 0 0 0 3px rgba(247, 131, 92, 0.2);
+            color: var(--text-primary);
+        }
+
+        /* ======= Estilos específicos para ClearableFileInput ======= */
+        /* Contenedor principal del campo de archivo */
+        .equipo-form #div_id_team_shield,
+        .equipo-form #div_id_team_banner {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: var(--editar-radius-small);
+            border: 1px solid var(--editar-border);
+        }
+
+        /* Ocultar la etiqueta "Actualmente:" y "Cambiar:" por defecto de Django */
+        .equipo-form .clearable-file-input a,
+        .equipo-form .clearable-file-input br + br + label {
+            display: none;
+        }
+
+        /* Estilo para la previsualización de la imagen actual */
+        .equipo-form .clearable-file-input a[href*="/media/"] {
+            display: block;
+            margin-bottom: 1rem;
+            position: relative;
+            width: 100%;
+            max-width: 200px;
+        }
+        .equipo-form .clearable-file-input a[href*="/media/"] img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--editar-radius-small);
+            border: 2px solid var(--editar-border);
+            transition: var(--editar-transition);
+        }
+        .equipo-form .clearable-file-input a[href*="/media/"]:hover img {
+            border-color: var(--editar-primary);
+            transform: scale(1.03);
+        }
+        .equipo-form .clearable-file-input a[href*="/media/"]::after {
+            content: 'Imagen Actual';
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Estilo para el checkbox "Limpiar" */
+        .equipo-form .clearable-file-input .form-check {
+            margin-top: 0.75rem;
+            padding-left: 0;
+        }
+        .equipo-form .clearable-file-input .form-check-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .equipo-form .clearable-file-input .form-check-input {
+            background-color: var(--editar-bg-elevated);
+            border-color: var(--editar-border);
+        }
+        .equipo-form .clearable-file-input .form-check-input:checked {
+            background-color: var(--seville-danger);
+            border-color: var(--seville-danger);
+        }
+
+        /* Estilo para el input de subida de archivo */
+        .equipo-form .clearable-file-input .form-control {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .equipo-form .clearable-file-input .form-control::-webkit-file-upload-button {
+            background: var(--editar-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--editar-radius-small);
+            margin-right: 1rem;
+            cursor: pointer;
+            transition: var(--editar-transition);
+        }
+        .equipo-form .clearable-file-input .form-control::-webkit-file-upload-button:hover {
+            background-color: #e6673a;
+        }
+
+        /* ======= Botones de Acción ======= */
+        .form-actions .btn-primary {
+            background-color: var(--editar-primary);
+            border-color: var(--editar-primary);
+        }
+        .form-actions .btn-primary:hover {
+            background-color: #e6673a;
+            border-color: #e6673a;
+        }
+        .form-actions .btn-outline-secondary {
+            color: var(--text-secondary);
+            border-color: var(--editar-border);
+        }
+        .form-actions .btn-outline-secondary:hover {
+            background-color: var(--editar-bg-elevated);
+            color: var(--text-primary);
+            border-color: var(--editar-border-strong);
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card, .display-5, .text-muted {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="editar-equipo-page">
+    <div class="container py-5">
+        
+        <!-- Encabezado de la página -->
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold">{{ titulo_pagina }}</h1>
+            <p class="text-muted fs-5">Actualiza la información y la identidad de tu equipo.</p>
+        </div>
+
+        <!-- Contenedor del Formulario -->
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="card shadow-lg">
+                    <div class="card-body p-4 p-md-5">
+                        
+                        <!-- Mensajes del Sistema (si los hay) -->
+                        {% if messages %}
+                            <div class="messages-section mb-4">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <form method="post" enctype="multipart/form-data" class="equipo-form" novalidate>
+                            {% csrf_token %}
+                            
+                            <!-- Sección de Información Básica -->
+                            <div class="form-section mb-5">
+                                <h4 class="form-section-title border-bottom border-secondary pb-3 mb-4">
+                                    <i class="fas fa-info-circle me-2"></i>Información Básica
+                                </h4>
+                                {{ form.nombre_equipo|as_crispy_field }}
+                                {{ form.descripcion|as_crispy_field }}
+                            </div>
+
+                            <!-- Sección de Personalización Visual -->
+                            <div class="form-section mb-4">
+                                <h4 class="form-section-title border-bottom border-secondary pb-3 mb-4">
+                                    <i class="fas fa-palette me-2"></i>Identidad Visual
+                                </h4>
+                                
+                                <div class="row g-4">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.team_shield|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.team_banner|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <p class="text-muted small mt-3">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Para eliminar una imagen, marca la casilla "Limpiar" y guarda los cambios.
+                                </p>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="form-actions d-flex justify-content-end gap-2 mt-5 pt-4 border-top border-secondary">
+                                <a href="{% url 'detalle_equipo' pk=equipo.pk %}" class="btn btn-lg btn-outline-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-lg btn-primary">
+                                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/equipo/editar_equipo.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animaciones de entrada
+        const elements = document.querySelectorAll('.animate-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 150);
+                }
+            });
+        });
+        
+        elements.forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(element);
+        });
+
+        // Validación visual de campos
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                const wrapper = this.closest('.field-wrapper');
+                if (wrapper) {
+                    if (this.value.trim() !== '') {
+                        wrapper.classList.add('valid');
+                        wrapper.classList.remove('invalid');
+                    } else if (this.hasAttribute('required')) {
+                        wrapper.classList.add('invalid');
+                        wrapper.classList.remove('valid');
+                    }
+                }
+            });
+        });
+
+        // Manejo del formulario de envío
+        const form = document.getElementById('editarEquipoForm');
+        const submitBtn = document.querySelector('.btn-submit');
+        
+        if (form && submitBtn) {
+            form.addEventListener('submit', function() {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            });
+        }
+
+        // Mejorar la experiencia de los campos de archivo
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const fileName = this.files[0].name;
+                    const wrapper = this.closest('.file-upload-wrapper');
+                    let feedback = wrapper.querySelector('.file-selected-feedback');
+                    
+                    if (!feedback) {
+                        feedback = document.createElement('div');
+                        feedback.className = 'file-selected-feedback';
+                        wrapper.appendChild(feedback);
+                    }
+                    
+                    feedback.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <span>Archivo seleccionado: ${fileName}</span>
+                    `;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

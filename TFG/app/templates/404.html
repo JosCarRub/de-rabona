@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Página No Encontrada (Error 404) - De Rabona{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        min-height: 70vh;
+        padding: 2rem;
+    }
+    .error-code {
+        font-size: 6rem;
+        font-weight: 800;
+        color: var(--seville-orange, #f7835c);
+        text-shadow: 0 4px 15px rgba(247, 131, 92, 0.2);
+        line-height: 1;
+    }
+    .error-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--text-primary, #fff);
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .error-message {
+        font-size: 1.1rem;
+        color: var(--text-secondary, #a8a8a8);
+        max-width: 500px;
+        margin-bottom: 2.5rem;
+    }
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+    .error-icon {
+        font-size: 4rem;
+        color: var(--border-color, rgba(255,255,255,0.1));
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <div class="error-code">404</div>
+    <h1 class="error-title">¡Fuera de Juego!</h1>
+    <p class="error-message">
+        Parece que te has adelantado a la jugada. La página que buscas no existe o ha sido movida.
+    </p>
+    <div class="error-actions">
+        <a href="{% url 'home' %}" class="btn btn-primary">
+            <i class="fas fa-home me-2"></i>Ir a Inicio
+        </a>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Volver Atrás
+        </a>
+    </div>
+</div>
+{% endblock %}

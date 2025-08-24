@@ -1,0 +1,892 @@
+/* ======= Variables CSS ======= */
+:root {
+    --seville-orange: #f7835c;
+    --mint: #00d4b1;
+    
+    --primary: var(--seville-orange);
+    --secondary: var(--mint);
+    --accent-subtle: rgba(247, 131, 92, 0.06);
+    --accent-border: rgba(247, 131, 92, 0.12);
+    --mint-subtle: rgba(0, 212, 177, 0.06);
+    --mint-border: rgba(0, 212, 177, 0.12);
+    
+    --text-primary: #ffffff;
+    --text-secondary: #a8a8a8;
+    --text-muted: #6b7280;
+    --bg-primary: #0F172A;
+    --bg-card: #1a1a2e;
+    --bg-elevated: #242438;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.12);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.25);
+    --radius: 16px;
+    --radius-small: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ======= Base ======= */
+body {
+    background-color: var(--bg-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* ======= Container ======= */
+.crear-equipo-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* ======= Progress Stepper ======= */
+.progress-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.5;
+    transition: var(--transition);
+}
+
+.step.active,
+.step.completed {
+    opacity: 1;
+}
+
+.step-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.step.active .step-circle {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.step.completed .step-circle {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+}
+
+.step-circle i {
+    font-size: 1.125rem;
+}
+
+.step-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.step.active .step-label {
+    color: var(--primary);
+}
+
+.step.completed .step-label {
+    color: var(--secondary);
+}
+
+.step-line {
+    width: 80px;
+    height: 2px;
+    background: var(--border);
+    margin: 0 1rem;
+}
+
+/* ======= Form Main Card ======= */
+.form-main-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.form-header {
+    background: var(--bg-elevated);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ======= Form Steps ======= */
+.form-step {
+    display: none;
+    padding: 2rem;
+}
+
+.form-step.active {
+    display: block;
+    animation: fadeInUp 0.5s ease;
+}
+
+.step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.step-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+
+.step-icon i {
+    font-size: 1.5rem;
+}
+
+.step-info {
+    flex: 1;
+}
+
+.step-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.step-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ======= Fields Container ======= */
+.fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.field-group.field-full {
+    width: 100%;
+}
+
+.field-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.field-label i {
+    color: var(--secondary);
+}
+
+.required {
+    color: #ef4444;
+}
+
+.field-wrapper {
+    position: relative;
+}
+
+.field-wrapper input,
+.field-wrapper textarea,
+.field-wrapper select {
+   width: 100%;
+   padding: 0.875rem 1rem;
+   background: rgba(255, 255, 255, 0.02);
+   border: 1px solid var(--border);
+   border-radius: var(--radius-small);
+   color: var(--text-primary);
+   font-size: 0.9rem;
+   transition: var(--transition);
+   font-family: inherit;
+}
+
+.field-wrapper input:focus,
+.field-wrapper textarea:focus,
+.field-wrapper select:focus {
+   outline: none;
+   border-color: var(--primary);
+   box-shadow: 0 0 0 3px rgba(247, 131, 92, 0.1);
+   background: rgba(255, 255, 255, 0.05);
+}
+
+.field-wrapper.error input,
+.field-wrapper.error textarea,
+.field-wrapper.error select {
+   border-color: #ef4444;
+   background: rgba(239, 68, 68, 0.05);
+}
+
+.field-wrapper.success input,
+.field-wrapper.success textarea,
+.field-wrapper.success select {
+   border-color: var(--secondary);
+   background: var(--mint-subtle);
+}
+
+.field-feedback {
+   position: absolute;
+   bottom: -1.25rem;
+   left: 0;
+   font-size: 0.75rem;
+   color: #ef4444;
+   opacity: 0;
+   transition: var(--transition);
+}
+
+.field-feedback.show {
+   opacity: 1;
+}
+
+textarea {
+   min-height: 100px;
+   resize: vertical;
+}
+
+/* ======= Upload Zone ======= */
+.upload-zone {
+   position: relative;
+   border: 2px dashed var(--border);
+   border-radius: var(--radius-small);
+   background: rgba(255, 255, 255, 0.02);
+   transition: var(--transition);
+   cursor: pointer;
+   overflow: hidden;
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+   border-color: var(--primary);
+   background: var(--accent-subtle);
+}
+
+.upload-zone input[type="file"] {
+   position: absolute;
+   opacity: 0;
+   width: 100%;
+   height: 100%;
+   cursor: pointer;
+   z-index: 2;
+}
+
+.upload-content {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   padding: 3rem 2rem;
+   gap: 1rem;
+}
+
+.upload-zone.has-image .upload-content {
+   display: none;
+}
+
+.upload-icon {
+   width: 64px;
+   height: 64px;
+   background: var(--bg-elevated);
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: var(--primary);
+}
+
+.upload-icon i {
+   font-size: 1.75rem;
+}
+
+.upload-text {
+   text-align: center;
+}
+
+.upload-primary {
+   font-size: 1rem;
+   font-weight: 500;
+   color: var(--text-primary);
+   margin: 0 0 0.25rem 0;
+}
+
+.upload-secondary {
+   font-size: 0.875rem;
+   color: var(--text-muted);
+   margin: 0;
+}
+
+.upload-preview {
+   position: relative;
+   display: none;
+   padding: 1rem;
+}
+
+.upload-preview.show {
+   display: block;
+}
+
+.upload-preview img {
+   width: 100%;
+   max-height: 200px;
+   object-fit: cover;
+   border-radius: var(--radius-small);
+}
+
+.remove-image {
+   position: absolute;
+   top: 1.5rem;
+   right: 1.5rem;
+   width: 32px;
+   height: 32px;
+   background: rgba(239, 68, 68, 0.9);
+   color: white;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: var(--transition);
+}
+
+.remove-image:hover {
+   background: #ef4444;
+   transform: scale(1.1);
+}
+
+/* ======= Colors Grid ======= */
+.colors-grid {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 1.5rem;
+}
+
+.color-picker-wrapper {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+}
+
+.color-picker-wrapper input[type="color"] {
+   width: 60px;
+   height: 40px;
+   border: none;
+   border-radius: 8px;
+   cursor: pointer;
+   flex-shrink: 0;
+}
+
+.color-display {
+   flex: 1;
+   padding: 0.5rem 0.75rem;
+   background: var(--bg-elevated);
+   border: 1px solid var(--border);
+   border-radius: 6px;
+   font-size: 0.875rem;
+   font-family: monospace;
+   color: var(--text-secondary);
+}
+
+/* ======= Preview Container ======= */
+.preview-container {
+   display: grid;
+   grid-template-columns: 1fr 300px;
+   gap: 2rem;
+}
+
+.team-preview {
+   background: rgba(255, 255, 255, 0.02);
+   border: 1px solid var(--border);
+   border-radius: var(--radius-small);
+   padding: 2rem;
+   display: flex;
+   flex-direction: column;
+   gap: 1.5rem;
+}
+
+.preview-header {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+}
+
+.preview-shield {
+   width: 64px;
+   height: 64px;
+   background: var(--accent-subtle);
+   border: 1px solid var(--accent-border);
+   border-radius: var(--radius-small);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-shrink: 0;
+   overflow: hidden;
+}
+
+.preview-shield i {
+   font-size: 1.5rem;
+   color: var(--primary);
+}
+
+.preview-shield img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.preview-info {
+   flex: 1;
+}
+
+.preview-name {
+   font-size: 1.25rem;
+   font-weight: 600;
+   color: var(--text-primary);
+   margin: 0 0 0.5rem 0;
+}
+
+.preview-description {
+   font-size: 0.875rem;
+   color: var(--text-secondary);
+   margin: 0;
+   line-height: 1.5;
+}
+
+.preview-colors {
+   display: flex;
+   gap: 1rem;
+}
+
+.color-chip {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.5rem;
+}
+
+.color-swatch {
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;
+   border: 2px solid var(--border);
+}
+
+.primary-swatch {
+   background-color: var(--primary);
+}
+
+.secondary-swatch {
+   background-color: var(--secondary);
+}
+
+.color-name {
+   font-size: 0.75rem;
+   color: var(--text-muted);
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+}
+
+/* ======= Form Summary ======= */
+.form-summary {
+   background: var(--bg-elevated);
+   border: 1px solid var(--border);
+   border-radius: var(--radius-small);
+   padding: 1.5rem;
+}
+
+.summary-title {
+   font-size: 1rem;
+   font-weight: 600;
+   color: var(--text-primary);
+   margin: 0 0 1rem 0;
+}
+
+.summary-items {
+   display: flex;
+   flex-direction: column;
+   gap: 0.75rem;
+}
+
+.summary-item {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 1rem;
+}
+
+.summary-label {
+   font-size: 0.875rem;
+   color: var(--text-muted);
+   font-weight: 500;
+}
+
+.summary-value {
+   font-size: 0.875rem;
+   color: var(--text-primary);
+   text-align: right;
+   word-break: break-word;
+}
+
+/* ======= Step Actions ======= */
+.step-actions {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding-top: 1.5rem;
+   border-top: 1px solid var(--border);
+}
+
+/* ======= Buttons ======= */
+.btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.875rem 1.5rem;
+   border-radius: var(--radius-small);
+   font-size: 0.875rem;
+   font-weight: 500;
+   text-decoration: none;
+   border: none;
+   cursor: pointer;
+   transition: var(--transition);
+   font-family: inherit;
+   white-space: nowrap;
+   position: relative;
+}
+
+.btn:disabled {
+   opacity: 0.6;
+   cursor: not-allowed;
+}
+
+.btn-primary {
+   background: var(--primary);
+   color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+   background: #e6743f;
+   transform: translateY(-1px);
+}
+
+.btn-secondary {
+   background: rgba(255, 255, 255, 0.05);
+   color: var(--text-secondary);
+   border: 1px solid var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+   background: rgba(255, 255, 255, 0.08);
+   color: var(--text-primary);
+   transform: translateY(-1px);
+}
+
+.btn-submit {
+   min-width: 140px;
+}
+
+.btn-submit .submit-spinner {
+   display: none;
+}
+
+.btn-submit.loading .submit-text {
+   opacity: 0;
+}
+
+.btn-submit.loading .submit-spinner {
+   display: inline-flex;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
+/* ======= Field Help ======= */
+.field-help {
+   font-size: 0.75rem;
+   color: var(--text-muted);
+   margin-top: 0.25rem;
+}
+
+/* ======= Field Errors ======= */
+.field-errors {
+   margin-top: 0.25rem;
+}
+
+.error-text {
+   display: block;
+   font-size: 0.75rem;
+   color: #ef4444;
+}
+
+/* ======= Form Errors Container ======= */
+.form-errors-container {
+   position: fixed;
+   top: 2rem;
+   right: 2rem;
+   z-index: 1000;
+}
+
+.error-banner {
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+   background: rgba(239, 68, 68, 0.9);
+   color: white;
+   padding: 1rem 1.5rem;
+   border-radius: var(--radius-small);
+   margin-bottom: 0.5rem;
+   box-shadow: var(--shadow-strong);
+   animation: slideInRight 0.3s ease;
+}
+
+/* ======= Responsive Design ======= */
+@media (max-width: 768px) {
+   .crear-equipo-container {
+       padding: 1rem;
+   }
+   
+   .progress-stepper {
+       margin-bottom: 1.5rem;
+   }
+   
+   .step-line {
+       width: 40px;
+       margin: 0 0.5rem;
+   }
+   
+   .step-label {
+       display: none;
+   }
+   
+   .form-header {
+       padding: 1.5rem;
+   }
+   
+   .form-title {
+       font-size: 1.5rem;
+   }
+   
+   .form-step {
+       padding: 1.5rem;
+   }
+   
+   .step-header {
+       flex-direction: column;
+       text-align: center;
+       gap: 1rem;
+   }
+   
+   .colors-grid {
+       grid-template-columns: 1fr;
+       gap: 1rem;
+   }
+   
+   .preview-container {
+       grid-template-columns: 1fr;
+       gap: 1.5rem;
+   }
+   
+   .step-actions {
+       flex-direction: column;
+       gap: 1rem;
+   }
+   
+   .btn {
+       width: 100%;
+       justify-content: center;
+   }
+   
+   .upload-content {
+       padding: 2rem 1rem;
+   }
+}
+
+@media (max-width: 480px) {
+   .crear-equipo-container {
+       padding: 0.75rem;
+   }
+   
+   .step-circle {
+       width: 40px;
+       height: 40px;
+   }
+   
+   .step-circle i {
+       font-size: 1rem;
+   }
+   
+   .form-header {
+       padding: 1.25rem;
+   }
+   
+   .form-step {
+       padding: 1.25rem;
+   }
+   
+   .step-icon {
+       width: 48px;
+       height: 48px;
+   }
+   
+   .fields-container {
+       gap: 1.25rem;
+   }
+   
+   .upload-icon {
+       width: 56px;
+       height: 56px;
+   }
+   
+   .upload-icon i {
+       font-size: 1.5rem;
+   }
+   
+   .color-picker-wrapper {
+       flex-direction: column;
+       align-items: stretch;
+       gap: 0.75rem;
+   }
+   
+   .color-picker-wrapper input[type="color"] {
+       width: 100%;
+       height: 50px;
+   }
+   
+   .preview-shield {
+       width: 56px;
+       height: 56px;
+   }
+   
+   .color-swatch {
+       width: 36px;
+       height: 36px;
+   }
+}
+
+/* ======= Animations ======= */
+@keyframes fadeInUp {
+   from {
+       opacity: 0;
+       transform: translateY(20px);
+   }
+   to {
+       opacity: 1;
+       transform: translateY(0);
+   }
+}
+
+@keyframes slideInRight {
+   from {
+       opacity: 0;
+       transform: translateX(100%);
+   }
+   to {
+       opacity: 1;
+       transform: translateX(0);
+   }
+}
+
+/* ======= Accessibility ======= */
+@media (prefers-reduced-motion: reduce) {
+   * {
+       animation-duration: 0.01ms !important;
+       animation-iteration-count: 1 !important;
+       transition-duration: 0.01ms !important;
+   }
+}
+
+/* ======= Focus States ======= */
+.btn:focus {
+   outline: 2px solid var(--primary);
+   outline-offset: 2px;
+}
+
+.field-wrapper input:focus,
+.field-wrapper textarea:focus,
+.field-wrapper select:focus {
+   outline: none;
+}
+
+.upload-zone:focus-within {
+   outline: 2px solid var(--primary);
+   outline-offset: 2px;
+}
+
+/* ======= Loading States ======= */
+.form-step.loading {
+   opacity: 0.7;
+   pointer-events: none;
+}
+
+.upload-zone.loading::after {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: -100%;
+   width: 100%;
+   height: 100%;
+   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+   animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+   0% {
+       left: -100%;
+   }
+   100% {
+       left: 100%;
+   }
+}

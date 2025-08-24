@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina|default:"Registrar Nueva Cancha" }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/canchas/registro_cancha_styles.css' %}" rel="stylesheet">
+<style>
+    .form-text {
+    color: #b0b0b0 !important; 
+    font-style: italic; 
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cancha-container" id="crear-cancha-container">
+    <!-- Hero Section -->
+    <section class="cancha-hero-section" id="cancha-hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="hero-text">
+                <h1 class="hero-title">{{ titulo_pagina|default:"Registrar Nueva Cancha" }}</h1>
+                <p class="hero-subtitle">Añade una nueva cancha a la comunidad de De Rabona</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Alert Section -->
+    <section class="info-alert-section" id="cancha-info-alert">
+        <div class="custom-alert alert-info">
+            <div class="alert-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="alert-content">
+                <h6 class="alert-title">Añadir una cancha a la comunidad</h6>
+                <p class="alert-text">Completa los detalles de la cancha. La información será visible para otros jugadores. Si eres dueño o administrador y quieres más opciones, contáctanos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section" id="cancha-form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h3 class="form-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Información de la Cancha
+                </h3>
+                <p class="form-subtitle">Completa todos los campos requeridos para registrar la cancha</p>
+            </div>
+
+            <div class="form-body">
+                <form method="post" enctype="multipart/form-data" class="cancha-form" id="canchaForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-fields">
+                        {{ form|crispy }}
+                    </div>
+                    
+                    <div class="form-actions">
+                        <a href="{% url 'canchas_lista' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i>
+                            <span>Cancelar</span>
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-save">
+                            <i class="fas fa-plus-circle"></i>
+                            <span class="btn-text">Registrar Cancha</span>
+                            <div class="btn-loader">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section" id="cancha-benefits-section">
+        <div class="benefits-header">
+            <h3 class="benefits-title">
+                <i class="fas fa-star"></i>
+                Beneficios de registrar tu cancha
+            </h3>
+        </div>
+        
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="benefit-content">
+                    <h4 class="benefit-title">Mayor Visibilidad</h4>
+                    <p class="benefit-description">Tu cancha será visible para toda la comunidad de jugadores de fútbol.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="benefit-content">
+                    <h4 class="benefit-title">Reservas Organizadas</h4>
+                    <p class="benefit-description">Los usuarios pueden organizar partidos y reservar tu cancha fácilmente.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="benefit-content">
+                    <h4 class="benefit-title">Estadísticas</h4>
+                    <p class="benefit-description">Obtén estadísticas sobre el uso y popularidad de tu cancha.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="benefit-content">
+                    <h4 class="benefit-title">Confianza</h4>
+                    <p class="benefit-description">Los jugadores pueden ver valoraciones y comentarios de otros usuarios.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('canchaForm');
+    const submitBtn = document.querySelector('.btn-save');
+    const btnText = document.querySelector('.btn-text');
+    const btnLoader = document.querySelector('.btn-loader');
+    
+    // Animación de entrada para las benefit cards
+    const benefitCards = document.querySelectorAll('.benefit-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('animate-in');
+                }, index * 150);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    benefitCards.forEach(card => {
+        observer.observe(card);
+    });
+    
+    // Validación y estado de carga del formulario
+    if (form && submitBtn) {
+        form.addEventListener('submit', function(e) {
+            // Validación básica de campos requeridos
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                    
+                    if (!field.parentNode.querySelector('.invalid-feedback')) {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'invalid-feedback';
+                        errorMsg.textContent = 'Este campo es requerido';
+                        field.parentNode.appendChild(errorMsg);
+                    }
+                } else {
+                    field.classList.remove('is-invalid');
+                    const errorMsg = field.parentNode.querySelector('.invalid-feedback');
+                    if (errorMsg) {
+                        errorMsg.remove();
+                    }
+                }
+            });
+            
+            // Validación específica para campos de texto largos
+            const textareas = form.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                if (textarea.value.length > 500) {
+                    isValid = false;
+                    textarea.classList.add('is-invalid');
+                    
+                    if (!textarea.parentNode.querySelector('.invalid-feedback')) {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'invalid-feedback';
+                        errorMsg.textContent = 'El texto no puede exceder los 500 caracteres';
+                        textarea.parentNode.appendChild(errorMsg);
+                    }
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                // Scroll al primer campo con error
+                const firstError = form.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+            
+            // Estado de carga
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            btnText.style.opacity = '0';
+            btnLoader.style.opacity = '1';
+        });
+        
+        // Quitar errores cuando el usuario empiece a escribir
+        const formFields = form.querySelectorAll('input, textarea, select');
+        formFields.forEach(field => {
+            field.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+                const errorMsg = this.parentNode.querySelector('.invalid-feedback');
+                if (errorMsg) {
+                    errorMsg.remove();
+                }
+            });
+        });
+    }
+    
+    // Contador de caracteres para textareas
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        const maxLength = 500;
+        const counter = document.createElement('div');
+        counter.className = 'char-counter';
+        counter.textContent = `0/${maxLength}`;
+        textarea.parentNode.appendChild(counter);
+        
+        textarea.addEventListener('input', function() {
+            const remaining = this.value.length;
+            counter.textContent = `${remaining}/${maxLength}`;
+            
+            if (remaining > maxLength * 0.8) {
+                counter.style.color = 'var(--cancha-warning)';
+            } else {
+                counter.style.color = 'var(--cancha-text-muted)';
+            }
+        });
+    });
+    
+    // Preview de imagen
+    const imageInput = document.querySelector('input[type="file"]');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let preview = document.querySelector('.image-preview');
+                    if (!preview) {
+                        preview = document.createElement('div');
+                        preview.className = 'image-preview';
+                        imageInput.parentNode.appendChild(preview);
+                    }
+                    
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview" class="preview-img">
+                        <button type="button" class="remove-preview" onclick="this.parentNode.remove(); document.querySelector('input[type=file]').value = '';">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

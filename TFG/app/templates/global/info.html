@@ -1,0 +1,162 @@
+<!-- app/templates/global/info_estado_equipo.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+<style>
+    .info-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .info-card {
+        background-color: var(--bg-card, #1a1a2e);
+        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+        border-radius: var(--radius-lg, 16px);
+        padding: 2rem;
+        box-shadow: var(--shadow-elegant, 0 4px 20px rgba(0,0,0,0.15));
+    }
+    .info-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+    .info-icon {
+        font-size: 3rem;
+        color: var(--seville-orange, #f7835c);
+        margin-bottom: 1rem;
+    }
+    .info-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary, #fff);
+    }
+    .info-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-secondary, #a8a8a8);
+        margin-top: 0.5rem;
+    }
+    .info-section {
+        margin-bottom: 2rem;
+    }
+    .info-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--seville-orange, #f7835c);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .info-section p, .info-section ul {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-secondary, #a8a8a8);
+    }
+    .info-section ul {
+        padding-left: 1.5rem;
+        list-style: none;
+    }
+    .info-section li {
+        position: relative;
+        padding-left: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    .info-section li::before {
+        content: '\f058'; /* Font Awesome check-circle */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        left: 0;
+        color: var(--mint, #00d4b1);
+    }
+    .contact-section {
+        margin-top: 2.5rem;
+        padding: 1.5rem;
+        background-color: var(--bg-elevated, #242438);
+        border-radius: var(--radius-small, 12px);
+        text-align: center;
+    }
+    .contact-section p {
+        margin-bottom: 0.5rem;
+    }
+    .contact-email {
+        font-weight: 600;
+        color: var(--mint, #00d4b1);
+        text-decoration: none;
+    }
+    .contact-email:hover {
+        text-decoration: underline;
+    }
+    .back-button-container {
+        text-align: center;
+        margin-top: 2.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="info-container">
+    <div class="info-card">
+        <div class="info-header">
+            <div class="info-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1 class="info-title">{{ titulo_pagina }}</h1>
+            <p class="info-subtitle">Transparencia sobre la gestión y moderación de equipos en De Rabona.</p>
+        </div>
+
+        <div class="info-content">
+            <div class="info-section">
+                <h3><i class="fas fa-toggle-off"></i>¿Por qué un equipo puede ser desactivado?</h3>
+                <p>
+                    En De Rabona, valoramos el juego limpio y el compromiso. Un equipo puede ser marcado como <strong>"Inactivo"</strong> por un administrador de la plataforma si se reciben quejas recurrentes y verificadas sobre ciertos comportamientos. El objetivo no es castigar, sino mantener una comunidad saludable y fiable para todos.
+                </p>
+                <p>Las razones principales para la desactivación incluyen:</p>
+                <ul>
+                    <li>No presentarse a partidos confirmados (No-Show) de forma repetida.</li>
+                    <li>Asistir a partidos con un número de jugadores significativamente menor al acordado.</li>
+                    <li>Comportamiento antideportivo o quejas graves de otros usuarios.</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3><i class="fas fa-eye-slash"></i>¿Qué implica que un equipo esté "Inactivo"?</h3>
+                <p>
+                    Cuando un equipo es desactivado por un administrador:
+                </p>
+                <ul>
+                    <li>El equipo <strong>no será eliminado</strong>. Su historial, estadísticas y miembros se conservan.</li>
+                    <li>El equipo <strong>no aparecerá en las listas públicas</strong>, como en la búsqueda de equipos o en los rankings.</li>
+                    <li>El capitán <strong>no podrá usar el equipo</strong> para crear nuevos retos o aceptar desafíos de otros equipos.</li>
+                    <li>El equipo seguirá siendo visible en la sección "Mis Equipos" del capitán y sus miembros, pero con un estado claro de "Inactivo".</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3><i class="fas fa-toggle-on"></i>¿Cómo se puede reactivar un equipo?</h3>
+                <p>
+                    Creemos en las segundas oportunidades. Si tu equipo ha sido desactivado y deseas apelar la decisión o demostrar un compromiso renovado con las normas de la comunidad, el capitán del equipo puede ponerse en contacto con nosotros.
+                </p>
+                <p>
+                    Un administrador revisará el caso, el historial del equipo y podrá reactivarlo si lo considera oportuno.
+                </p>
+            </div>
+
+            <div class="contact-section">
+                <p>Para cualquier consulta sobre el estado de tu equipo, contacta con nosotros:</p>
+                <a href="mailto:{{ email_contacto }}" class="contact-email">{{ email_contacto }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="back-button-container">
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Volver
+        </a>
+    </div>
+</div>
+{% endblock %}

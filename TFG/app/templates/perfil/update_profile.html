@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina|default:"Editar Perfil" }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/perfil/editar_perfil_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="editar-perfil-page">
+    <div class="editar-perfil-container"> 
+
+            
+            <div class="form-container"> 
+                <div class="form-header"> 
+                    <h4 class="content-card-title"> 
+                    <h4 class="form-title">
+                        <i class="fas fa-user-edit"></i> 
+                        {{ titulo_pagina|default:"Editar Perfil" }}
+                    </h4>
+                </div>
+                <div class="form-body">
+                    {% if messages %}
+                        <div class="messages-section mb-4"> 
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data" class="profile-form">
+                        {% csrf_token %}
+                        
+                        {{ form.non_field_errors }}
+
+                        <!-- Información Personal -->
+                        <div class="form-section"> 
+                            <h5 class="form-section-title">
+                                <i class="fas fa-user"></i> 
+                                Información Personal
+                            </h5>
+                            
+                            <div class="form-group">
+                                
+                                {{ form.nombre|as_crispy_field }}
+                                
+                                {% for error in form.nombre.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.fecha_nacimiento|as_crispy_field  }} 
+                                        {% for error in form.fecha_nacimiento.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.genero |as_crispy_field  }} 
+                                        {% for error in form.genero.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información de Fútbol -->
+                        <div class="form-section">
+                            <h5 class="form-section-title">
+                                <i class="fas fa-futbol"></i>
+                                Información de Fútbol
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form.posicion |as_crispy_field  }}
+                                        {% for error in form.posicion.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.ubicacion.id_for_label }}" class="form-label">{{ form.ubicacion.label }}</label>
+                                        {{ form.ubicacion }}
+                                        {% for error in form.ubicacion.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Imágenes del Perfil -->
+                        <div class="form-section">
+                            <h5 class="form-section-title">
+                                <i class="fas fa-images"></i>
+                                Imágenes del Perfil
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.imagen_perfil.id_for_label }}" class="form-label">{{ form.imagen_perfil.label }}</label>
+                                        {% if user.imagen_perfil %}
+                                            <div class="current-image-preview">
+                                                <img src="{{ user.imagen_perfil.url }}" alt="Avatar actual" class="current-avatar">
+                                                <div class="current-image-info">
+                                                    <small>Imagen actual</small> 
+                                                    <a href="{{ user.imagen_perfil.url }}" target="_blank" class="view-image-link">
+                                                        <i class="fas fa-external-link-alt"></i>
+                                                        Ver imagen
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {{ form.imagen_perfil }}
+                                        {% for error in form.imagen_perfil.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.banner_perfil.id_for_label }}" class="form-label">{{ form.banner_perfil.label }}</label>
+                                        {% if user.banner_perfil %}
+                                            <div class="current-image-preview">
+                                                <img src="{{ user.banner_perfil.url }}" alt="Banner actual" class="current-banner">
+                                                <div class="current-image-info">
+                                                    <small>Banner actual</small>
+                                                    <a href="{{ user.banner_perfil.url }}" target="_blank" class="view-image-link">
+                                                        <i class="fas fa-external-link-alt"></i>
+                                                        Ver imagen
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {{ form.banner_perfil }}
+                                        {% for error in form.banner_perfil.errors %}
+                                            <div class="invalid-feedback d-block">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="form-actions"> 
+                            <a href="{% url 'perfil' %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> 
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> 
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }} {# Si main.html tiene JS base que quieres mantener #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Preview de imagen cuando se selecciona un archivo
+    const imageInputs = document.querySelectorAll('.profile-form input[type="file"]'); // Más específico
+    
+    imageInputs.forEach(input => {
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    let previewContainer = input.closest('.form-group').querySelector('.current-image-preview');
+                    
+                    if (previewContainer) {
+                        const img = previewContainer.querySelector('img');
+                        if (img) {
+                            img.src = event.target.result;
+                        }
+                        // Actualizar texto a "Vista previa"
+                        const smallText = previewContainer.querySelector('.current-image-info small');
+                        if (smallText) smallText.textContent = 'Vista previa';
+                        const link = previewContainer.querySelector('.view-image-link');
+                        if(link) link.style.display = 'none'; // Ocultar "Ver imagen"
+                    } else {
+                        // Crear preview si no existe (para el caso de que no hubiera imagen previa)
+                        const newPreviewDiv = document.createElement('div');
+                        newPreviewDiv.className = 'current-image-preview'; // Asegúrate que los estilos CSS se apliquen
+                        const imgClass = input.name === 'imagen_perfil' ? 'current-avatar' : 'current-banner';
+                        newPreviewDiv.innerHTML = `
+                            <img src="${event.target.result}" alt="Vista previa" class="${imgClass}">
+                            <div class="current-image-info">
+                                <small>Vista previa</small>
+                            </div>
+                        `;
+                        // Insertar antes del input de archivo
+                        input.parentNode.insertBefore(newPreviewDiv, input);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+    
+});
+</script>
+{% endblock %}

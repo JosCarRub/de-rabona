@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirmar Eliminación - De Rabona{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ======= Variables y Base ======= */
+    :root {
+        --delete-danger: #ef4444;
+        --delete-danger-dark: #dc2626;
+        --delete-danger-subtle: rgba(239, 68, 68, 0.1);
+        --delete-danger-border: rgba(239, 68, 68, 0.3);
+        --delete-bg-card: #1a1a2e;
+        --delete-border: rgba(255, 255, 255, 0.1);
+        --delete-transition: all 0.3s ease;
+    }
+
+    /* ======= Animación de Entrada ======= */
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .confirm-delete-card {
+        background-color: var(--delete-bg-card);
+        border-color: var(--delete-danger-border);
+        border-width: 2px;
+        box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2);
+        animation: fadeInScale 0.5s ease-out forwards;
+    }
+
+    /* ======= Cabecera de la Tarjeta ======= */
+    .confirm-delete-card .card-header {
+        background-color: var(--delete-danger) !important;
+        border-bottom: 2px solid var(--delete-danger-dark) !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    .confirm-delete-card .card-header h4 {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .confirm-delete-card .card-header i {
+        animation: pulse-warning 2s infinite;
+    }
+
+    @keyframes pulse-warning {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+
+    /* ======= Cuerpo de la Tarjeta ======= */
+    .confirm-delete-card .card-body {
+        padding: 2rem !important;
+    }
+    .confirm-delete-card .card-body p.fs-5 {
+        color: var(--text-primary);
+        line-height: 1.5;
+    }
+    .confirm-delete-card .card-body strong {
+        color: var(--delete-danger);
+        font-weight: 600;
+    }
+
+    /* ======= Alerta de Advertencia ======= */
+    .alert-danger {
+        background-color: var(--delete-danger-subtle) !important;
+        border-color: var(--delete-danger-border) !important;
+        color: #fca5a5 !important;
+        border-radius: 12px;
+    }
+    .alert-danger .alert-heading {
+        color: #f87171 !important;
+        font-weight: 700;
+    }
+
+    /* ======= Botones de Acción ======= */
+    .form-actions .btn {
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        transition: var(--delete-transition);
+    }
+    .form-actions .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .form-actions .btn-secondary {
+        background-color: var(--bs-gray-700);
+        border-color: var(--bs-gray-600);
+    }
+    .form-actions .btn-secondary:hover {
+        background-color: var(--bs-gray-600);
+        border-color: var(--bs-gray-500);
+    }
+
+    .form-actions .btn-danger {
+        background-color: var(--delete-danger);
+        border-color: var(--delete-danger);
+        box-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
+    }
+    .form-actions .btn-danger:hover {
+        background-color: var(--delete-danger-dark);
+        border-color: var(--delete-danger-dark);
+        box-shadow: 0 6px 25px rgba(239, 68, 68, 0.35);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card text-white shadow-lg confirm-delete-card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Confirmar Eliminación de Equipo
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="fs-5">
+                        ¿Estás absolutamente seguro de que quieres eliminar el equipo 
+                        <strong>"{{ equipo.nombre_equipo }}"</strong>?
+                    </p>
+                    <div class="alert alert-danger mt-4">
+                        <h5 class="alert-heading fw-bold"><i class="fas fa-skull-crossbones me-2"></i>¡Atención!</h5>
+                        <p class="mb-0">Esta acción es <strong>irreversible</strong>. Se perderán todos los datos asociados al equipo, incluyendo su historial de partidos y estadísticas.</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-end gap-3 mt-4 form-actions">
+                            <a href="{% url 'detalle_equipo' pk=equipo.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Sí, eliminar equipo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

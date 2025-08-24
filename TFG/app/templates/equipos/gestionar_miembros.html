@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina|default:"Gestionar Miembros" }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+    <style>
+        /* ======= Variables y Base ======= */
+        :root {
+            --gestionar-primary: #f7835c;
+            --gestionar-secondary: #00d4b1;
+            --gestionar-bg-card: #1a1a2e;
+            --gestionar-bg-elevated: #242438;
+            --gestionar-border: rgba(255, 255, 255, 0.08);
+            --gestionar-radius: 16px;
+            --gestionar-radius-small: 12px;
+            --gestionar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ======= Animaciones ======= */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* ======= Estilos de la Página ======= */
+        .page-header {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .card {
+            transition: var(--gestionar-transition);
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--gestionar-border-strong);
+        }
+
+        .card-header {
+            background-color: var(--gestionar-bg-elevated) !important;
+            border-bottom-color: var(--gestionar-border) !important;
+        }
+        .card-header h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .card-header i {
+            color: var(--gestionar-primary);
+        }
+
+        /* ======= Lista de Miembros ======= */
+        .list-group-item {
+            transition: background-color 0.2s ease-in-out;
+            border-bottom: 1px solid var(--gestionar-border) !important;
+        }
+        .list-group-item:last-child {
+            border-bottom: none !important;
+        }
+        .list-group-item:hover {
+            background-color: rgba(255, 255, 255, 0.04) !important;
+        }
+
+        .player-avatar {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border: 2px solid var(--gestionar-border);
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .captain-badge {
+            font-size: 0.7rem;
+            padding: 0.3em 0.7em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background-color: var(--gestionar-primary) !important;
+            color: white !important;
+        }
+
+        .btn-delete-member {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            transition: var(--gestionar-transition);
+        }
+        .btn-delete-member:hover {
+            background: #ef4444;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* ======= Formulario de Invitación ======= */
+        .invitation-form .form-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .invitation-form .form-control {
+            background-color: var(--gestionar-bg-elevated);
+            border-color: var(--gestionar-border);
+            color: var(--text-primary);
+        }
+        .invitation-form .form-control:focus {
+            background-color: var(--gestionar-bg-elevated);
+            border-color: var(--gestionar-primary);
+            box-shadow: 0 0 0 3px rgba(247, 131, 92, 0.15);
+            color: var(--text-primary);
+        }
+        .invitation-form .btn-success {
+            background-color: var(--gestionar-secondary);
+            border-color: var(--gestionar-secondary);
+            font-weight: 600;
+        }
+        .invitation-form .btn-success:hover {
+            background-color: #00c2a3;
+            border-color: #00c2a3;
+        }
+
+        /* ======= Invitaciones Pendientes ======= */
+        .pending-invitation-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gestionar-border);
+        }
+        .pending-invitation-item:last-child {
+            border-bottom: none;
+        }
+        .pending-avatar {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+        }
+        .pending-name {
+            font-size: 0.9rem;
+        }
+
+        /* ======= Estado Vacío ======= */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-muted);
+        }
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            <!-- Encabezado -->
+            <div class="text-center mb-5 page-header">
+                <h1 class="display-5 fw-bold">{{ titulo_pagina }}</h1>
+                <p class="text-muted fs-5">Añade o elimina jugadores de la plantilla de <strong>{{ equipo.nombre_equipo }}</strong>.</p>
+                <a href="{% url 'detalle_equipo' pk=equipo.pk %}" class="btn btn-sm btn-outline-secondary mt-2">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al Equipo
+                </a>
+            </div>
+
+            <!-- Mensajes del Sistema -->
+            {% if messages %}
+                <div class="messages-section mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="row g-4">
+                <!-- Columna de la Lista de Miembros -->
+                <div class="col-md-7">
+                    <div class="card bg-dark text-white border-secondary shadow-sm h-100 animate-in" style="animation-delay: 100ms;">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="fas fa-users me-2"></i>Miembros Actuales ({{ miembros.count }})</h4>
+                        </div>
+                        <div class="card-body">
+                            {% if miembros %}
+                                <ul class="list-group list-group-flush">
+                                    {% for miembro in miembros %}
+                                        <li class="list-group-item bg-transparent text-white d-flex justify-content-between align-items-center px-0 py-3">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ miembro.get_avatar_url }}" alt="Avatar de {{ miembro.nombre }}" class="rounded-circle me-3 player-avatar">
+                                                <div>
+                                                    <strong class="d-block player-name">{{ miembro.nombre }}</strong>
+                                                    {% if miembro == equipo.capitan %}
+                                                        <span class="badge captain-badge">Capitán</span>
+                                                    {% else %}
+                                                        <small class="text-muted">{{ miembro.get_posicion_display|default:"Jugador" }}</small>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            
+                                            {% if miembro != equipo.capitan %}
+                                                <form method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a {{ miembro.nombre }} del equipo?');">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="miembro_id" value="{{ miembro.pk }}">
+                                                    <button type="submit" name="eliminar_miembro" class="btn btn-sm btn-delete-member" title="Eliminar del equipo">
+                                                        <i class="fas fa-user-times"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="fas fa-user-friends"></i>
+                                    <p>Aún no hay miembros en el equipo.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna para Invitar Miembros y Ver Pendientes -->
+                <div class="col-md-5">
+                    <!-- Formulario para Invitar -->
+                    <div class="card bg-dark text-white border-secondary shadow-sm mb-4 animate-in" style="animation-delay: 200ms;">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Invitar Nuevo Miembro</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" class="invitation-form">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <div class="d-grid mt-3">
+                                    <button type="submit" name="invitar_miembro" class="btn btn-success">
+                                        <i class="fas fa-plus-circle me-2"></i>Enviar Invitación
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Invitaciones Pendientes -->
+                    <div class="card bg-dark text-white border-secondary shadow-sm animate-in" style="animation-delay: 300ms;">
+                        <div class="card-header">
+                            <h4 class="mb-0"><i class="fas fa-clock me-2"></i>Invitaciones Pendientes</h4>
+                        </div>
+                        <div class="card-body">
+                            {% if invitaciones_pendientes %}
+                                <ul class="list-group list-group-flush">
+                                    {% for invitacion in invitaciones_pendientes %}
+                                        <li class="list-group-item bg-transparent text-white d-flex align-items-center px-0 py-2 pending-invitation-item">
+                                            <img src="{{ invitacion.invitado.get_avatar_url }}" alt="Avatar" class="rounded-circle me-3 pending-avatar">
+                                            <span class="pending-name">A <strong>{{ invitacion.invitado.nombre }}</strong></span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="fas fa-envelope-open"></i>
+                                    <p>No hay invitaciones pendientes.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

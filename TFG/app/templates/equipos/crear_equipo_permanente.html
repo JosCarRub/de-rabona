@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ titulo_pagina|default:"Crear Equipo" }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/equipo/crear_equipo_styles.css' %}">
+<style>
+    .form-text {
+    color: #b0b0b0 !important; 
+    font-style: italic; 
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="crear-equipo-container">
+    <!-- Stepper Progress -->
+    <div class="progress-stepper">
+        <div class="step active" data-step="1">
+            <div class="step-circle">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <span class="step-label">Información</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2">
+            <div class="step-circle">
+                <i class="fas fa-palette"></i>
+            </div>
+            <span class="step-label">Personalización</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">
+            <div class="step-circle">
+                <i class="fas fa-eye"></i>
+            </div>
+            <span class="step-label">Confirmar</span>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-main-card">
+        <!-- Header -->
+        <div class="form-header">
+            <h1 class="form-title">{{ titulo_pagina|default:"Crear Nuevo Equipo" }}</h1>
+            <p class="form-subtitle">Completa los pasos para crear tu equipo personalizado</p>
+        </div>
+
+        <!-- Form Content -->
+        <form method="post" enctype="multipart/form-data" class="multi-step-form">
+            {% csrf_token %}
+            
+            <!-- Step 1: Información Básica -->
+            <div class="form-step active" data-step="1">
+                <div class="step-content">
+                    <div class="step-header">
+                        <div class="step-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="step-info">
+                            <h2 class="step-title">Información del Equipo</h2>
+                            <p class="step-description">Ingresa los datos básicos de tu equipo</p>
+                        </div>
+                    </div>
+
+                    <div class="fields-container">
+                        <!-- Nombre del Equipo -->
+                        <div class="field-group">
+                            <label for="{{ form.nombre_equipo.id_for_label }}" class="field-label">
+                                <i class="fas fa-tag"></i>
+                                <span>Nombre del Equipo</span>
+                                {% if form.nombre_equipo.field.required %}<span class="required">*</span>{% endif %}
+                            </label>
+                            <div class="field-wrapper">
+                                {{ form.nombre_equipo }}
+                                <div class="field-feedback"></div>
+                            </div>
+                            {% if form.nombre_equipo.help_text %}
+                                <div class="field-help">{{ form.nombre_equipo.help_text }}</div>
+                            {% endif %}
+                            {% if form.nombre_equipo.errors %}
+                                <div class="field-errors">
+                                    {% for error in form.nombre_equipo.errors %}
+                                        <span class="error-text">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    
+
+                        
+
+                        <!-- Descripción -->
+                        <div class="field-group field-full">
+                            <label for="{{ form.descripcion.id_for_label }}" class="field-label">
+                                <i class="fas fa-align-left"></i>
+                                <span>Descripción</span>
+                                {% if form.descripcion.field.required %}<span class="required">*</span>{% endif %}
+                            </label>
+                            <div class="field-wrapper">
+                                {{ form.descripcion }}
+                                <div class="field-feedback"></div>
+                            </div>
+                            {% if form.descripcion.help_text %}
+                                <div class="field-help">{{ form.descripcion.help_text }}</div>
+                            {% endif %}
+                            {% if form.descripcion.errors %}
+                                <div class="field-errors">
+                                    {% for error in form.descripcion.errors %}
+                                        <span class="error-text">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="field-group field-full">
+                        <label for="{{ form.miembros_iniciales.id_for_label }}" class="field-label">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Añadir Miembros Iniciales</span>
+                        </label>
+                        <div class="field-wrapper">
+                            {{ form.miembros_iniciales }}
+                        </div>
+                        {% if form.miembros_iniciales.help_text %}
+                            <div class="field-help">{{ form.miembros_iniciales.help_text }}</div>
+                        {% endif %}
+                        {% if form.miembros_iniciales.errors %}
+                            <div class="field-errors">
+                                {% for error in form.miembros_iniciales.errors %}
+                                    <span class="error-text">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="step-actions">
+                        <div></div> <!-- Spacer -->
+                        <button type="button" class="btn btn-primary btn-next" onclick="nextStep()">
+                            <span>Siguiente</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Personalización -->
+            <div class="form-step" data-step="2">
+                <div class="step-content">
+                    <div class="step-header">
+                        <div class="step-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="step-info">
+                            <h2 class="step-title">Personalización</h2>
+                            <p class="step-description">Agrega elementos visuales a tu equipo</p>
+                        </div>
+                    </div>
+
+                    <div class="fields-container">
+                        <!-- Escudo del Equipo (Renderizado estándar) -->
+                        <div class="field-group field-full">
+                            {{ form.team_shield|as_crispy_field }}
+                        </div>
+
+                        <!-- Banner del Equipo (Renderizado estándar) -->
+                        <div class="field-group field-full">
+                            {{ form.team_banner|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button type="button" class="btn btn-secondary btn-prev" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Anterior</span>
+                        </button>
+                        <button type="button" class="btn btn-primary btn-next" onclick="nextStep()">
+                            <span>Siguiente</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Vista Previa y Confirmación -->
+            <div class="form-step" data-step="3">
+                <div class="step-content">
+                    <div class="step-header">
+                        <div class="step-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="step-info">
+                            <h2 class="step-title">Confirmar Equipo</h2>
+                            <p class="step-description">Revisa los datos antes de crear tu equipo</p>
+                        </div>
+                    </div>
+
+                    <!-- Summary  -->
+                    <div class="form-summary">
+                        <h4 class="summary-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Resumen</span>
+                        </h4>
+                        <div class="summary-items">
+                            <div class="summary-item">
+                                <span class="summary-label">Nombre:</span>
+                                <span class="summary-value" id="summary-name">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Descripción:</span>
+                                <span class="summary-value" id="summary-description">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Miembros Iniciales:</span>
+                                <span class="summary-value" id="summary-miembros">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Escudo:</span>
+                                <span class="summary-value" id="summary-escudo">No seleccionado</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Banner:</span>
+                                <span class="summary-value" id="summary-banner">No seleccionado</span>
+                            </div>
+                        </div>
+                        <div class="captain-info">
+                            <div class="captain-label">
+                                <i class="fas fa-crown"></i>
+                                <span>Capitán del Equipo</span>
+                            </div>
+                            <div class="captain-name">{{ user.get_full_name|default:user.username }}</div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button type="button" class="btn btn-secondary btn-prev" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Anterior</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-submit">
+                            <i class="fas fa-check"></i>
+                            <span class="submit-text">Crear Equipo</span>
+                            <div class="submit-spinner">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Form Errors -->
+    {% if form.non_field_errors %}
+        <div class="form-errors-container">
+            {% for error in form.non_field_errors %}
+                <div class="error-banner">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>{{ error }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Scripts -->
+<script>
+    let currentStep = 1;
+    const totalSteps = 3;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeForm();
+    });
+    
+    function initializeForm() {
+        const form = document.querySelector('.multi-step-form');
+        const inputs = form.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(input => {
+            // Solo actualizamos el resumen, ya no hay vista previa visual
+            input.addEventListener('input', updateSummary);
+            input.addEventListener('change', updateSummary);
+        });
+    
+        form.addEventListener('submit', handleSubmit);
+    }
+    
+    function nextStep() {
+        if (currentStep === 1 && !validateStep(currentStep)) {
+            return;
+        }
+        if (currentStep < totalSteps) {
+            currentStep++;
+            showStep(currentStep);
+            updateStepper();
+            updateSummary(); // Actualizar resumen al cambiar de paso
+        }
+    }
+    
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+            updateStepper();
+        }
+    }
+    
+    function showStep(step) {
+        document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+        const targetStep = document.querySelector(`.form-step[data-step="${step}"]`);
+        if (targetStep) {
+            targetStep.classList.add('active');
+        }
+    }
+    
+    function updateStepper() {
+        document.querySelectorAll('.step').forEach((step, index) => {
+            const stepNum = index + 1;
+            step.classList.toggle('active', stepNum === currentStep);
+            step.classList.toggle('completed', stepNum < currentStep);
+        });
+    }
+    
+    function validateStep(step) {
+        const stepElement = document.querySelector(`.form-step[data-step="${step}"]`);
+        const requiredInputs = stepElement.querySelectorAll('[required]');
+        let isValid = true;
+        requiredInputs.forEach(input => {
+            if (!input.value.trim()) {
+                isValid = false;
+                // La validación de Crispy Forms se encargará de mostrar el error visualmente
+            }
+        });
+        return isValid;
+    }
+    
+    function updateSummary() {
+        // Selectores para los campos del formulario
+        const nombreInput = document.querySelector('[name="nombre_equipo"]');
+        const descripcionInput = document.querySelector('[name="descripcion"]');
+        const miembrosSelect = document.querySelector('[name="miembros_iniciales"]');
+        const shieldInput = document.querySelector('[name="team_shield"]');
+        const bannerInput = document.querySelector('[name="team_banner"]');
+    
+        // Selectores para los elementos del resumen
+        const summaryName = document.getElementById('summary-name');
+        const summaryDesc = document.getElementById('summary-description');
+        const summaryMiembros = document.getElementById('summary-miembros');
+        const summaryEscudo = document.getElementById('summary-escudo');
+        const summaryBanner = document.getElementById('summary-banner');
+    
+        // Actualizar valores
+        if (summaryName && nombreInput) summaryName.textContent = nombreInput.value || '-';
+        if (summaryDesc && descripcionInput) summaryDesc.textContent = descripcionInput.value || '-';
+        
+        if (summaryMiembros && miembrosSelect) {
+            const selectedCount = Array.from(miembrosSelect.options).filter(option => option.selected).length;
+            summaryMiembros.textContent = selectedCount > 0 ? `${selectedCount} miembro(s)` : 'Ninguno';
+        }
+    
+        if (summaryEscudo && shieldInput) {
+            summaryEscudo.textContent = shieldInput.files.length > 0 ? shieldInput.files[0].name : 'No seleccionado';
+        }
+        
+        if (summaryBanner && bannerInput) {
+            summaryBanner.textContent = bannerInput.files.length > 0 ? bannerInput.files[0].name : 'No seleccionado';
+        }
+    }
+    
+    function handleSubmit(e) {
+        // Validar el paso actual antes de enviar
+        if (!validateStep(currentStep)) {
+            e.preventDefault(); // Detener el envío si la validación falla
+            alert("Por favor, completa todos los campos requeridos en el paso actual.");
+            return;
+        }
+        
+        const submitBtn = document.querySelector('.btn-submit');
+        if (submitBtn) {
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        }
+    }
+</script>
+    
+{% endblock %}

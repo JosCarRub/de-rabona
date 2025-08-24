@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina|default:"Mis Invitaciones" }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+    <style>
+        /* ======= Variables y Base ======= */
+        :root {
+            --invitacion-primary: #f7835c;
+            --invitacion-success: #10b981;
+            --invitacion-danger: #ef4444;
+            --invitacion-bg-card: #1a1a2e;
+            --invitacion-bg-elevated: #242438;
+            --invitacion-border: rgba(255, 255, 255, 0.1);
+            --invitacion-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            --invitacion-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+    
+
+        /* ======= Animaciones ======= */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ======= Estilos de la Página ======= */
+        .page-header {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* ======= Tarjeta de Invitación ======= */
+        .invitacion-card {
+            background-color: var(--invitacion-bg-card) !important;
+            border-color: var(--invitacion-border) !important;
+            border-left: 4px solid var(--invitacion-primary);
+            transition: var(--invitacion-transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .invitacion-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--invitacion-shadow);
+            border-left-color: var(--invitacion-secondary);
+        }
+
+        .small-text-muted {
+            color: rgb(190, 192, 194);
+        }
+
+        .equipo-shield-sm {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--invitacion-border);
+            transition: var(--invitacion-transition);
+        }
+        .invitacion-card:hover .equipo-shield-sm {
+            transform: rotate(-5deg);
+        }
+
+        .invitacion-card h5 {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .invitacion-card h5 strong {
+            color: var(--invitacion-primary);
+        }
+
+        /* ======= Botones de Acción ======= */
+        .btn-accion {
+            min-width: 120px;
+            font-weight: 600;
+            transition: var(--invitacion-transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-accion:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .btn-success {
+            background-color: var(--invitacion-success);
+            border-color: var(--invitacion-success);
+        }
+        .btn-success:hover {
+            background-color: #0f9a6c;
+            border-color: #0f9a6c;
+        }
+        .btn-danger {
+            background-color: var(--invitacion-danger);
+            border-color: var(--invitacion-danger);
+        }
+        .btn-danger:hover {
+            background-color: #d62c1a;
+            border-color: #d62c1a;
+        }
+
+        /* ======= Estado Vacío ======= */
+        .empty-state-card {
+            background-color: var(--invitacion-bg-card);
+            border: 2px dashed var(--invitacion-border);
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .empty-state-card i {
+            color: var(--invitacion-primary);
+            opacity: 0.6;
+        }
+        .empty-state-card .lead {
+            color: var(--text-secondary);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            
+            <!-- Encabezado de la página -->
+            <div class="text-center mb-5 page-header">
+                <h1 class="display-5 fw-bold">{{ titulo_pagina }}</h1>
+            </div>
+
+            <!-- Mensajes del sistema -->
+            {% if messages %}
+                <div class="messages-section mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Lista de Invitaciones -->
+            {% if invitaciones %}
+                <div class="list-group">
+                    {% for invitacion in invitaciones %}
+                        <div class="list-group-item mb-3 rounded shadow-sm p-4 invitacion-card" >
+                            <div class="d-flex flex-column flex-md-row w-100 justify-content-between align-items-md-center">
+                                
+                                <!-- Información de la invitación -->
+                                <div class="d-flex align-items-center mb-3 mb-md-0">
+                                    <!-- Escudo del Equipo -->
+                                    <img src="{{ invitacion.equipo.get_shield_url }}" alt="Escudo de {{ invitacion.equipo.nombre_equipo }}" class="equipo-shield-sm me-3">
+                                    
+                                    <!-- Detalles de la Invitación -->
+                                    <div>
+                                        <h5 class="mb-1">Invitación para unirte a <strong>{{ invitacion.equipo.nombre_equipo }}</strong></h5>
+                                        <p class="mb-1">
+                                            <small class="small-text-muted">
+                                                <i class="fas fa-user-shield me-1"></i>Invitado por: <strong>{{ invitacion.invitado_por.nombre }}</strong> (Capitán)
+                                                <span class="mx-2 d-none d-sm-inline">•</span>
+                                                <br class="d-sm-none">
+                                                <i class="fas fa-clock me-1"></i>Enviada hace {{ invitacion.fecha_creacion|timesince }} 
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="d-flex gap-2 flex-shrink-0 ms-md-3">
+                                    <form action="{% url 'responder_invitacion' pk=invitacion.pk accion='aceptar' %}" method="post" onsubmit="return confirm('¿Aceptar la invitación y unirte a {{ invitacion.equipo.nombre_equipo }}?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-accion">
+                                            <i class="fas fa-check me-2"></i>Aceptar
+                                        </button>
+                                    </form>
+                                    <form action="{% url 'responder_invitacion' pk=invitacion.pk accion='rechazar' %}" method="post" onsubmit="return confirm('¿Rechazar la invitación de {{ invitacion.equipo.nombre_equipo }}?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-accion">
+                                            <i class="fas fa-times me-2"></i>Rechazar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <!-- Estado Vacío -->
+                <div class="text-center p-5 rounded shadow-sm empty-state-card">
+                    <div class="mb-4">
+                        <i class="fas fa-envelope-open-text fa-4x"></i>
+                    </div>
+                    <p class="lead fw-bold">No tienes invitaciones pendientes.</p>
+                    <p class="text-white-50">Cuando un capitán te invite a su equipo, la invitación aparecerá aquí.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

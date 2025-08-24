@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina|default:"Registrar Resultado" }} - De Rabona{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/partidos/resultado_partido_styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="resultado-container" id="resultado-container">
+    <!-- Hero Section -->
+    <section class="resultado-hero-section" id="resultado-hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-clipboard-check"></i>
+            </div>
+            <div class="hero-text">
+                <h1 class="hero-title">{{ titulo_pagina|default:"Registrar Resultado del Partido" }}</h1>
+                <p class="hero-subtitle">Registra el marcador final y actualiza las estadísticas</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partido Info Section -->
+
+    <!-- Equipos Section -->
+    <section class="equipos-section" id="resultado-equipos-section">
+        {% if partido.equipo_local and partido.equipo_visitante %}
+            <div class="equipos-enfrentamiento">
+                <div class="equipo-card equipo-local">
+                    <div class="equipo-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="equipo-info">
+                        <h3 class="equipo-nombre">{{ partido.equipo_local.nombre_equipo|default:"Equipo Local" }}</h3>
+                        <span class="equipo-label">Local</span>
+                    </div>
+                </div>
+                
+                <div class="vs-separator">
+                    <div class="vs-circle">
+                        <span class="vs-text">VS</span>
+                    </div>
+                </div>
+                
+                <div class="equipo-card equipo-visitante">
+                    <div class="equipo-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="equipo-info">
+                        <h3 class="equipo-nombre">{{ partido.equipo_visitante.nombre_equipo|default:"Equipo Visitante" }}</h3>
+                        <span class="equipo-label">Visitante</span>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="no-equipos-warning">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="warning-content">
+                    <h4 class="warning-title">Equipos no asignados</h4>
+                    <p class="warning-text">Los equipos no están asignados a este partido. Las calificaciones ELO no se actualizarán automáticamente.</p>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Formulario Section -->
+    <section class="form-section" id="resultado-form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h3 class="form-title">
+                    <i class="fas fa-trophy"></i>
+                    Resultado Final
+                </h3>
+                <p class="form-subtitle">Ingresa el marcador final del partido</p>
+            </div>
+
+            <div class="form-body">
+                <form method="post" class="resultado-form" id="resultadoForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-fields">
+                        {{ form|crispy }}
+                    </div>
+                    
+                    <div class="form-actions">
+                        <a href="{% url 'detalle_partido' pk=partido.id_partido %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i>
+                            <span>Cancelar</span>
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-save">
+                            <i class="fas fa-save"></i>
+                            <span class="btn-text">Guardar Resultado</span>
+                            <div class="btn-loader">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Cards Section -->
+    <section class="info-section" id="resultado-info-section">
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="info-card-content">
+                    <h4 class="info-card-title">Calificación ELO</h4>
+                    <p class="info-card-description">Las calificaciones de los jugadores se actualizarán automáticamente basándose en el resultado.</p>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="info-card-content">
+                    <h4 class="info-card-title">Estadísticas</h4>
+                    <p class="info-card-description">El resultado se añadirá al historial y estadísticas personales de cada jugador.</p>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <div class="info-card-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="info-card-content">
+                    <h4 class="info-card-title">Historial</h4>
+                    <p class="info-card-description">Una vez guardado, el resultado quedará registrado permanentemente en el historial del partido.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('resultadoForm');
+    const submitBtn = document.querySelector('.btn-save');
+    const btnText = document.querySelector('.btn-text');
+    const btnLoader = document.querySelector('.btn-loader');
+    
+    // Animación de entrada para las info cards
+    const infoCards = document.querySelectorAll('.info-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('animate-in');
+                }, index * 150);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    infoCards.forEach(card => {
+        observer.observe(card);
+    });
+    
+    // Validación y estado de carga del formulario
+    if (form && submitBtn) {
+        form.addEventListener('submit', function(e) {
+            // Validación básica
+            const scoreFields = form.querySelectorAll('input[type="number"]');
+            let isValid = true;
+            
+            scoreFields.forEach(field => {
+                const value = parseInt(field.value);
+                if (isNaN(value) || value < 0) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                    
+                    if (!field.parentNode.querySelector('.invalid-feedback')) {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'invalid-feedback';
+                        errorMsg.textContent = 'Ingresa un número válido (0 o mayor)';
+                        field.parentNode.appendChild(errorMsg);
+                    }
+                } else {
+                    field.classList.remove('is-invalid');
+                    const errorMsg = field.parentNode.querySelector('.invalid-feedback');
+                    if (errorMsg) {
+                        errorMsg.remove();
+                    }
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                return;
+            }
+            
+            // Confirmación antes de enviar
+            const confirmMsg = '¿Estás seguro de que quieres guardar este resultado? Una vez guardado no podrá ser modificado.';
+            if (!confirm(confirmMsg)) {
+                e.preventDefault();
+                return;
+            }
+            
+            // Estado de carga
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            btnText.style.opacity = '0';
+            btnLoader.style.opacity = '1';
+        });
+        
+        // Quitar errores cuando el usuario empiece a escribir
+        const formFields = form.querySelectorAll('input');
+        formFields.forEach(field => {
+            field.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+                const errorMsg = this.parentNode.querySelector('.invalid-feedback');
+                if (errorMsg) {
+                    errorMsg.remove();
+                }
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

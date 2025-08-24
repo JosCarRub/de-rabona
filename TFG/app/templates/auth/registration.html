@@ -1,0 +1,114 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - De Rabona</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{% static 'css/auth/registration_styles.css' %}" rel="stylesheet">
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'landing' %}">De Rabona</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link-auth" href="{% url 'login' %}">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Iniciar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Register Section -->
+    <section class="register-section">
+        <!-- Background Elements -->
+        <div class="register-bg-pattern"></div>
+        
+        <!-- Hero Image -->
+        <div class="register-hero-image d-none d-xl-block">
+            <img src="https://sportrenders.com/wp-content/uploads/2023/06/David-Beckham-Image-PNG-Render-Manchester-United-Futbol-Sport-Renders.png" alt="David Beckham" loading="lazy">
+            <div class="register-image-glow"></div>
+        </div>
+        
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    <div class="register-card fade-in">
+                        <div class="register-card-header">
+                            <h1 class="register-title">Crea tu cuenta</h1>
+                            
+                            <p class="register-subtitle">
+                                Únete a la comunidad y empieza a disfrutar del fútbol como antes
+                            </p>
+                        </div>
+                        
+                        <form method="post" enctype="multipart/form-data" class="register-form">
+                            {% csrf_token %}
+                            
+                            <div class="form-grid">
+                                {{ form | crispy }}
+                            </div>
+                            
+                            <button type="submit" class="btn btn-register">
+                                <i class="fas fa-user-plus"></i>
+                                Crear cuenta
+                            </button>
+                            
+                            <div class="register-footer">
+                                <p>¿Ya tienes una cuenta? 
+                                    <a href="{% url 'login' %}" class="register-link">Inicia sesión</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="register-footer-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="footer-text">© 2025 De Rabona.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="footer-text">
+                        Reviviendo el fútbol callejero 
+                        <i class="fas fa-futbol gradient-text mx-1"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

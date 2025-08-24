@@ -1,0 +1,997 @@
+/* ======= Variables CSS para Editar Equipo ======= */
+:root {
+    --seville-orange: #f7835c;
+    --mint: #00d4b1;
+    
+    --editar-primary: var(--seville-orange);
+    --editar-secondary: var(--mint);
+    --editar-accent-subtle: rgba(247, 131, 92, 0.06);
+    --editar-accent-border: rgba(247, 131, 92, 0.12);
+    --editar-mint-subtle: rgba(0, 212, 177, 0.06);
+    --editar-mint-border: rgba(0, 212, 177, 0.12);
+    
+    --editar-text-primary: #ffffff;
+    --editar-text-secondary: #a8a8a8;
+    --editar-text-muted: #6b7280;
+    --editar-bg-primary: #0F172A;
+    --editar-bg-card: #1a1a2e;
+    --editar-bg-elevated: #242438;
+    --editar-bg-input: rgba(255, 255, 255, 0.02);
+    --editar-border: rgba(255, 255, 255, 0.08);
+    --editar-border-strong: rgba(255, 255, 255, 0.12);
+    --editar-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --editar-shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.25);
+    --editar-radius: 16px;
+    --editar-radius-small: 12px;
+    --editar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ======= Container Principal ======= */
+.editar-equipo-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* ======= Hero Section ======= */
+.editar-equipo-hero {
+    background: var(--editar-bg-card);
+    border: 1px solid var(--editar-border);
+    border-radius: var(--editar-radius);
+    padding: 2rem;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.current-team-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+}
+
+.current-shield {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: var(--editar-radius-small);
+    overflow: hidden;
+    border: 1px solid var(--editar-border);
+}
+
+.current-shield img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.shield-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--editar-bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--editar-text-muted);
+}
+
+.shield-placeholder i {
+    font-size: 1.5rem;
+}
+
+.current-details {
+    flex: 1;
+}
+
+.current-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--editar-text-primary);
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.02em;
+}
+
+.current-subtitle {
+    font-size: 1rem;
+    color: var(--editar-text-secondary);
+    margin: 0;
+}
+
+.edit-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--editar-accent-subtle);
+    border: 1px solid var(--editar-accent-border);
+    border-radius: var(--editar-radius-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.edit-icon i {
+    font-size: 1.25rem;
+    color: var(--editar-primary);
+}
+
+/* ======= Mensajes del Sistema ======= */
+.messages-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.custom-alert {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: var(--editar-radius-small);
+    border: 1px solid;
+    transition: var(--editar-transition);
+}
+
+.custom-alert.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.custom-alert.alert-error,
+.custom-alert.alert-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.custom-alert.alert-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.alert-icon {
+    flex-shrink: 0;
+}
+
+.alert-content {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.alert-dismiss {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.7;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: var(--editar-transition);
+}
+
+.alert-dismiss:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ======= Formulario Principal ======= */
+.editar-equipo-form-container {
+    background: var(--editar-bg-card);
+    border: 1px solid var(--editar-border);
+    border-radius: var(--editar-radius);
+    overflow: hidden;
+}
+
+/* ======= Secciones del Formulario ======= */
+.form-sections {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-section {
+    padding: 2rem;
+    border-bottom: 1px solid var(--editar-border);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.section-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--editar-accent-subtle);
+    border: 1px solid var(--editar-accent-border);
+    border-radius: var(--editar-radius-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.section-icon i {
+    font-size: 1rem;
+    color: var(--editar-primary);
+}
+
+.section-content {
+    flex: 1;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--editar-text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.section-description {
+    font-size: 0.9rem;
+    color: var(--editar-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ======= Grid del Formulario ======= */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.form-field-full {
+    grid-column: 1 / -1;
+}
+
+/* ======= Campos del Formulario ======= */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--editar-text-primary);
+    margin-bottom: 0;
+}
+
+.label-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.label-icon {
+    color: var(--editar-secondary);
+    font-size: 0.875rem;
+}
+
+.label-text {
+    flex: 1;
+}
+
+.required-asterisk {
+    color: #ef4444;
+    margin-left: 0.25rem;
+}
+
+/* ======= Field Wrapper ======= */
+.field-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.field-wrapper input,
+.field-wrapper textarea,
+.field-wrapper select {
+    flex: 1;
+    background: var(--editar-bg-input);
+    border: 1px solid var(--editar-border);
+    border-radius: var(--editar-radius-small);
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+    color: var(--editar-text-primary);
+    transition: var(--editar-transition);
+}
+
+.field-wrapper input:focus,
+.field-wrapper textarea:focus,
+.field-wrapper select:focus {
+    outline: none;
+    border-color: var(--editar-primary);
+    box-shadow: 0 0 0 3px rgba(247, 131, 92, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.field-wrapper textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.field-wrapper input::placeholder,
+.field-wrapper textarea::placeholder {
+    color: var(--editar-text-muted);
+}
+
+/* ======= Field Status ======= */
+.field-status {
+    position: absolute;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.field-valid-icon,
+.field-invalid-icon {
+    display: none;
+    font-size: 1rem;
+}
+
+.field-valid-icon {
+    color: #10b981;
+}
+
+.field-invalid-icon {
+    color: #ef4444;
+}
+
+.field-wrapper.valid .field-valid-icon {
+    display: block;
+}
+
+.field-wrapper.invalid .field-invalid-icon {
+    display: block;
+}
+
+/* ======= Color Preview ======= */
+.color-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 1rem;
+    padding: 0.5rem;
+    background: var(--editar-bg-elevated);
+    border: 1px solid var(--editar-border);
+    border-radius: 8px;
+}
+
+.color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid var(--editar-border);
+    flex-shrink: 0;
+}
+
+.color-value {
+    font-size: 0.8rem;
+    color: var(--editar-text-secondary);
+    font-family: monospace;
+}
+
+/* ======= File Upload ======= */
+.file-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.file-upload-wrapper {
+    position: relative;
+}
+
+.file-upload-wrapper input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-upload-preview {
+    position: relative;
+    min-height: 200px;
+    background: var(--editar-bg-input);
+    border: 2px dashed var(--editar-border);
+    border-radius: var(--editar-radius-small);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: var(--editar-transition);
+}
+
+.file-upload-preview:hover {
+    border-color: var(--editar-primary);
+    background: var(--editar-accent-subtle);
+}
+
+.file-upload-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.upload-placeholder i {
+    font-size: 3rem;
+    color: var(--editar-text-muted);
+}
+
+.upload-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--editar-text-primary);
+    margin: 0;
+}
+
+.upload-subtitle {
+    font-size: 0.875rem;
+    color: var(--editar-text-muted);
+    margin: 0;
+}
+
+.current-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--editar-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.current-file-info {
+    margin-top: 0.75rem;
+}
+
+.file-info-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--editar-text-muted);
+    font-size: 0.85rem;
+}
+
+/* ======= Form Help y Errores ======= */
+.form-help {
+    font-size: 0.8rem;
+    color: var(--editar-text-muted);
+    line-height: 1.4;
+}
+
+.field-errors {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.error-text {
+    font-size: 0.8rem;
+    color: #ef4444;
+    font-weight: 500;
+}
+
+/* ======= Sección de Comparación ======= */
+.comparison-section {
+    padding: 2rem;
+    background: var(--editar-bg-elevated);
+    border-top: 1px solid var(--editar-border);
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.comparison-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comparison-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--editar-text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.comparison-label::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.comparison-item:first-child .comparison-label::before {
+    background: var(--editar-text-muted);
+}
+
+.comparison-item:last-child .comparison-label::before {
+    background: var(--editar-primary);
+}
+
+/* ======= Team Preview Card ======= */
+.team-preview-card {
+    background: var(--editar-bg-card);
+    border: 1px solid var(--editar-border);
+    border-radius: var(--editar-radius-small);
+    padding: 1.5rem;
+    transition: var(--editar-transition);
+}
+
+.team-preview-card.new {
+    border-color: var(--editar-primary);
+    box-shadow: 0 0 0 1px rgba(247, 131, 92, 0.1);
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.preview-shield {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--editar-border);
+    flex-shrink: 0;
+}
+
+.preview-shield img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-info {
+    flex: 1;
+}
+
+.preview-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--editar-text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.preview-description {
+    font-size: 0.875rem;
+    color: var(--editar-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.preview-colors {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.color-sample {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--editar-border);
+    transition: var(--editar-transition);
+}
+
+/* ======= Botones de Acción ======= */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    padding: 2rem;
+    background: var(--editar-bg-elevated);
+    border-top: 1px solid var(--editar-border);
+    justify-content: flex-end;
+}
+
+/* ======= Botones ======= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: var(--editar-radius-small);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: var(--editar-transition);
+    font-family: inherit;
+    white-space: nowrap;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary {
+    background: var(--editar-primary);
+    color: white;
+    border: 1px solid var(--editar-primary);
+}
+
+.btn-primary:hover {
+    background: #e6743f;
+    border-color: #e6743f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(247, 131, 92, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--editar-text-secondary);
+    border: 1px solid var(--editar-border);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--editar-text-primary);
+    border-color: var(--editar-border-strong);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* ======= Submit Button Estados ======= */
+.btn-submit {
+    min-width: 160px;
+}
+
+.btn-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--editar-transition);
+}
+
+.btn-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: var(--editar-transition);
+}
+
+.btn-submit.loading .btn-content {
+    opacity: 0;
+}
+
+.btn-submit.loading .btn-spinner {
+    opacity: 1;
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ======= Responsive Design ======= */
+@media (max-width: 768px) {
+    .editar-equipo-container {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+    
+    .editar-equipo-hero {
+        padding: 1.5rem;
+    }
+    
+    .hero-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+    
+    .current-team-info {
+        gap: 1rem;
+    }
+    
+    .current-shield {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .current-name {
+        font-size: 1.5rem;
+    }
+    
+    .form-section {
+        padding: 1.5rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .comparison-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column-reverse;
+        padding: 1.5rem;
+    }
+    
+    .file-upload-preview {
+        min-height: 150px;
+    }
+    
+    .upload-placeholder {
+        padding: 1.5rem;
+    }
+    
+    .upload-placeholder i {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .editar-equipo-container {
+        padding: 0.75rem;
+    }
+    
+    .editar-equipo-hero {
+        padding: 1.25rem;
+    }
+    
+    .current-shield {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .current-name {
+        font-size: 1.25rem;
+    }
+    
+    .edit-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .form-section {
+        padding: 1.25rem;
+    }
+    
+    .section-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .field-wrapper input,
+    .field-wrapper textarea,
+    .field-wrapper select {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .file-upload-preview {
+        min-height: 120px;
+    }
+    
+    .upload-placeholder {
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+    
+    .upload-placeholder i {
+        font-size: 2rem;
+    }
+    
+    .upload-text {
+        font-size: 0.9rem;
+    }
+    
+    .upload-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .preview-shield {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .preview-name {
+        font-size: 1rem;
+    }
+    
+    .preview-description {
+        font-size: 0.8rem;
+    }
+    
+    .color-sample {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .form-actions {
+        padding: 1.25rem;
+    }
+}
+
+/* ======= Animaciones ======= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-in {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ======= Estados de Focus ======= */
+.field-wrapper:focus-within {
+    transform: translateY(-1px);
+}
+
+.team-preview-card:focus-within {
+    outline: 2px solid var(--editar-primary);
+    outline-offset: 2px;
+}
+
+/* ======= Loading States ======= */
+.file-upload-preview.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-preview.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* ======= Accesibilidad ======= */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ======= Estados especiales ======= */
+.form-field.has-error .field-wrapper input,
+.form-field.has-error .field-wrapper textarea,
+.form-field.has-error .field-wrapper select {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-field.has-error .field-wrapper {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* ======= Drag and Drop Estados ======= */
+.file-upload-preview.drag-over {
+    border-color: var(--editar-primary);
+    background: var(--editar-accent-subtle);
+    transform: scale(1.02);
+}
+
+/* ======= Color Input Styling ======= */
+input[type="color"] {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--editar-border);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+}
+
+/* ======= Placeholder personalizado para archivos ======= */
+input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
